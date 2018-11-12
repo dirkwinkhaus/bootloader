@@ -1,5 +1,5 @@
 jmp sos_hexViewer1000_0000
-str_copyrightInfo			db '(c)opyright by dirk winkhaus, 2014 - version 1.0.2', 0
+str_copyrightInfo			db '(c)opyright by dirk winkhaus | version 1.0.2', 0
 str_programIntro			db 'Hex viewer for memory: 0x1000:0x0000', 0
 str_keyInfo					db 'browse data with w/s/d/a/0/r/f/x', 0
 str_offsetInfo				db 'Offset:', 0

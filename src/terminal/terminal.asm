@@ -18,6 +18,7 @@ nanoOS:
 
 
 jmp endOfKernel
+%include 'how.asm'
 %include 'nano.asm'
 %include 'io.asm'
 %include 'data.asm'

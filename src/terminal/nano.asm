@@ -175,5 +175,3 @@ nano_command_how:
 nano_command_commandNotFound:
 	call nano_commandNotFound
 	ret
-
-%include 'nanoOS\how.asm'

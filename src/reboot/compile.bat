@@ -1,3 +1,2 @@
 @echo off
-nasm reboot.asm -f bin -o ..\cdcontent\reboot.do 
-pause
+nasm reboot.asm -f bin -o ..\..\disc_data\reboot.do 
