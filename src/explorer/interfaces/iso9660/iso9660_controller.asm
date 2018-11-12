@@ -139,7 +139,7 @@ iso9660_getROMInformation:
 	mov word [discAddressPacket.numberOfBlockTransfer], 1
 	mov word [discAddressPacket.startingAbsoluteBlock], 0x10
 	mov ah, 0x42										; extended function read
-	mov dl, [bootDriveID]								; drive id
+	mov dl, [drive_id]								    ; drive id
 	mov si, discAddressPacket							; address of reading parameters
 	int 0x13											; read sectors and move to standard buffer location 0x1000:0x0000
 
@@ -178,7 +178,7 @@ iso9660_getDirectories:
 	mov bx, [iso9660_volumeDescriptor.sectorOfPathTableLE1]
 	mov word [discAddressPacket.startingAbsoluteBlock], bx
 	mov ah, 0x42										; extended function read
-	mov dl, [bootDriveID]								; drive id
+	mov dl, [drive_id]								    ; drive id
 	mov si, discAddressPacket							; address of reading parameters
 	int 0x13											; read sectors and move to standard buffer location 0x1000:0x0000
 	ret
@@ -187,7 +187,7 @@ iso9660_getDirectories:
 ;mov word [discAddressPacket.numberOfBlockTransfer], 10
 iso9660_loadSectors:
 	mov ah, 0x42										; extended function read
-	mov dl, [bootDriveID]								; drive id
+	mov dl, [drive_id]								    ; drive id
 	mov si, discAddressPacket							; address of reading parameters
 	int 0x13											; read sectors and move to standard buffer location 0x1000:0x0000
 	ret

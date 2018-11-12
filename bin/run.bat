@@ -1,1 +1,1 @@
-qemu-system-i386 -cdrom ../preOS.iso
+qemu-system-i386 -cdrom ..\rc\preOS.iso
