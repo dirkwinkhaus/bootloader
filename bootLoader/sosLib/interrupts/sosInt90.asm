@@ -33,33 +33,33 @@ executionController:
 	;mov si, 0xd000 			; set data offeset
 	;mov cx, 2048				; how many bytes
 	.executionexecutionController_loadCode:
-		push ax					; save register
-		push bx
-		push es					; save register
-		push di					; save register
-		mov bx, 0x2000			; setup operation segment
-		mov es, bx
-		xor bx, bx
-		mov di, bx
-		.executionexecutionController_loadCode_copyCode:
-				mov al, [ds:si + bx]
-				mov byte [es:di + bx], al
-				dec cx
-				inc bx
-				cmp cx, 0x0
-				jne .executionexecutionController_loadCode_copyCode
-		pop di
-		pop es
-		pop bx
-		pop ax		
-		jmp .executionexecutionController_end
+	push ax					; save register
+	push bx
+	push es					; save register
+	push di					; save register
+	mov bx, 0x2000			; setup operation segment
+	mov es, bx
+	xor bx, bx
+	mov di, bx
+	.executionexecutionController_loadCode_copyCode:
+	mov al, [ds:si + bx]
+	mov byte [es:di + bx], al
+	dec cx
+	inc bx
+	cmp cx, 0x0
+	jne .executionexecutionController_loadCode_copyCode
+	pop di
+	pop es
+	pop bx
+	pop ax		
+	jmp .executionexecutionController_end
 		
 	.executionexecutionController_exitCode:
-		mov ax, 0x0000
-		mov es, ax
-		mov ds, ax
-		;jmp 0x0000:0x7c00
-		jmp .executionexecutionController_end
+	mov ax, 0x0000
+        mov es, ax
+	mov ds, ax
+	;jmp 0x0000:0x7c00
+	jmp .executionexecutionController_end
 
 	;mov ah, 0x02
 	.executionexecutionController_cleanSegment:

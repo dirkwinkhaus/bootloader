@@ -1,12 +1,14 @@
 @echo off
-nasm %1bootLoader.asm -f bin -o %1../bootLoader.bin 
-if errorlevel 1 goto echoError
-goto runProgramm
-:echoError
+cd ../bootloader
+@echo create binary file
+nasm bootloader.asm -f bin -o ../bootloader.bin 
+if errorlevel 1 goto display_error
+goto create_disc
+:display_error
 pause
-goto endOfBatch
-:runProgramm
-del %1..\preOS.iso
+goto end_of_file
+:create_disc
+del ..\preOS.iso
 ultraiso -volume myVolume -sysid mySysId -preparer prepdirk -publisher pubdirk -joliet -bootfile ..\bootLoader.bin -output ..\preOS.iso -file .\cdcontent\file-a.txt -file .\cdcontent\file-b.txt -file .\cdcontent\filec.txt -file .\cdcontent\terminal.do -file .\cdcontent\reboot.do -file .\cdcontent\play.do -directory .\cdcontent\directory
-qemu-system-i386.exe -cdrom ..\preOS.iso
-:endOfBatch
+:end_of_file
+cd ../bin
