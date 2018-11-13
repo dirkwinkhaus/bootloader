@@ -1,5 +1,5 @@
 org 0x7C00                                      ; setup start address 
-jmp loadLibraries                               ; load library in 2nd sector
+jmp load_dependencies                           ; load library in 2nd sector
 version                     db 1, '0.0.7', 2
 boot_drive_id 				db 0				; boot drive id
 
@@ -16,10 +16,9 @@ start:
     times 2046-($-$$) db 0                      ; fill rest with 0 to fill sector
     dw 0xAA55                                   ; end of boot sector
     
-loadLibraries:
+load_dependencies:
     mov [boot_drive_id], dl                     ; save boot drive id
     %include 'interrupts\sosInt81.asm'          ; loads interrupt 81h
     %include 'interrupts\sosInt90.asm'          ; loads interrupt 81h
 
-    ; include other dependencies here
     jmp start
