@@ -1,5 +1,5 @@
 org 0x7C00                                      ; setup start address 
-jmp load_dependencies                           ; load library in 2nd sector
+jmp load_sys_dependencies                           ; load library in 2nd sector
 version                     db 1, '0.0.7', 2
 boot_drive_id 				db 0				; boot drive id
 drive_id db 0
@@ -19,18 +19,18 @@ start:
     times 2046-($-$$) db 0                      ; fill rest with 0 to fill sector
     dw 0xAA55                                   ; end of boot sector
     
-load_dependencies:
+load_sys_dependencies:
     mov [boot_drive_id], dl     ; save boot drive id
     mov [drive_id], dl     ; set drive id
     %include 'interrupts\sosInt81.asm'          ; loads interrupt 81h
     %include 'interrupts\sosInt90.asm'          ; loads interrupt 81h
+
+    jmp start
+    
+load_dependencies:
     %include '../interfaces\iso9660\iso9660_rom_structure.asm'
     %include '../interfaces\iso9660\iso9660_data_structure.asm'
     %include '../interfaces\iso9660\iso9660_controller.asm'
-
-
-    jmp start
-
 preos_explorer_data:
     .str_copyrightInfo:         db 'preos explorer (c)opyright by dirk winkhaus | version 1.0.0', 0
                                    ;0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890
