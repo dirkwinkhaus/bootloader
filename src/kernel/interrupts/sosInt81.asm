@@ -130,10 +130,46 @@ textOperation:
 	;mov cx, 1 		; y
 	cmp ah, 0x0C
 	je .textOperation_setAttributeBuffer
+
+	;mov ah, 0x0D	; is string 1 contained by string 2
+	;mov si, string_variable_1		; min this string should end with 0
+	;mov di, string_variable_2
+    ;mov cx, max_comparable_length
+	cmp ah, 0x0D
+	je .textOperation_compareStrings
 	
 	jmp .textOperation_end
 ;===========================================================================================
+	;mov ah, 0x0D	; is string 1 contained by string 2
+	;mov si, string_variable_1		; min this string should end with 0
+	;mov di, string_variable_2
+    ;mov cx, max_comparable_length
+    .textOperation_compareStrings:
+        .textOperation_compareStrings_loop:
+            mov ah, [si]
+            mov al, [di]
+            
+            cmp ah, 0
+            je .textOperation_compareStrings_equal
+            
+            cmp ah, al
+            jne .textOperation_compareStrings_not_equal
+            
+            inc si
+            inc di
+            jmp .textOperation_compareStrings_loop
+        
+        .textOperation_compareStrings_equal:
+        mov al, 1
+        jmp .textOperation_end
 
+        .textOperation_compareStrings_not_equal:
+        mov al, 0
+        jmp .textOperation_end
+        
+        
+    
+    
 	;mov ah, 0x0C	; draw string by length
 	;mov al, 4		; how often place attributes
 	;mov dl, 14		; foreground
