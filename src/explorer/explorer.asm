@@ -1,8 +1,8 @@
 jmp preos_explorer
 
-%include 'interfaces\iso9660\iso9660_rom_structure.asm'
-%include 'interfaces\iso9660\iso9660_data_structure.asm'
-%include 'interfaces\iso9660\iso9660_controller.asm'
+%include '../interfaces\iso9660\iso9660_rom_structure.asm'
+%include '../interfaces\iso9660\iso9660_data_structure.asm'
+%include '../interfaces\iso9660\iso9660_controller.asm'
 %include 'hex_viewer.asm'
 
 preos_explorer_data:
@@ -86,10 +86,10 @@ preos_explorer:
             jmp .handle_explorer
         
         .execFile:
-            mov ah, 0x1    ; draw charachter
-            mov bx, 40     ; x
-            mov cx, 0     ; y
-            mov cl, [preos_explorer_data.marker_y]     ; y
+            mov ah, 0x1                                 ; draw charachter
+            mov bx, 40                                  ; x
+            mov cx, 0                                   ; y
+            mov cl, [preos_explorer_data.marker_y]      ; y
             int 0x81
 
             mov word [discAddressPacket.numberOfBlockTransfer], 1
@@ -99,10 +99,10 @@ preos_explorer:
             push ds
             push si
             mov ax, 0x1000
-            mov ds, ax             ; set data segment
+            mov ds, ax                                  ; set data segment
             mov ah, 0x01
-            mov si, 0             ; set data offeset
-            mov cx, 2048            ; how many bytes
+            mov si, 0                                   ; set data offeset
+            mov cx, 2048                                ; transfer 2048 bytes (1 sector)
             int 0x90
             pop si
             pop ds
@@ -110,7 +110,7 @@ preos_explorer:
             mov es, ax
             mov ds, ax
             push .handle_explorer
-            jmp 0x2000:0x0000
+            jmp 0x2000:0x0000                           ; back to kernel
         
         .step_marker_down:
             mov al, byte[preos_explorer_data.markerMaxY] 
