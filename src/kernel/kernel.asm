@@ -17,7 +17,6 @@ start:
     int 0x81
 
     call find_kernel_file;
-    ; jmp start
     jmp $                                       ; stay here
 
     times 2046-($-$$) db 0                      ; fill rest with 0 to fill sector
@@ -34,6 +33,7 @@ load_dependencies:
     %include '../interfaces\iso9660\iso9660_rom_structure.asm'
     %include '../interfaces\iso9660\iso9660_data_structure.asm'
     %include '../interfaces\iso9660\iso9660_controller.asm'
+    %include 'transfer_model.asm'
 
 find_kernel_file:   
     ;print copyright info
@@ -69,7 +69,7 @@ find_kernel_file:
     je .boot_file_found
     
     ; show error info
-    .boot_file_not_found:
+.boot_file_not_found:
     mov ah, 0x03    
     mov si, kernel.boot_file_not_found
     mov dl, 4
@@ -81,7 +81,7 @@ find_kernel_file:
     jmp $
     
     ; show success info
-    .boot_file_found:
+.boot_file_found:
     mov ah, 0x03
     mov si, kernel.boot_file_found
     mov dl, 14
@@ -89,5 +89,35 @@ find_kernel_file:
     mov bx, 0
     mov cl, 2
     int 0x81
+    
+    ;print address 
+    mov ah, 0x03                                            ; draw string by length
+    mov al, 4                                               ; length of string    
+    mov si, iso9660_fileDescriptor.locationOfExtendLBA1
+    mov dl, 0                                               ; foreground
+    mov dh, 0                                               ; background
+    mov bx, 20                                              ; x
+    mov cl, 2
+    int 0x81
+    
+    ;print address human
+    mov ah, 0x05                                            ; draw hex
+    mov al, byte [iso9660_fileDescriptor.locationOfExtendLBA1]    
+    mov dl, 15                                              ; foreground
+    mov dh, 0                                               ; background
+    mov bx, 40         ; x
+    mov cl, 2
+    int 0x81
+    
+    ; load kernel
+    mov dword[iso9660_fileDescriptor.locationOfExtendLBA1], eax
+    mov eax, dword [kernel_transfer_model.startingAbsoluteBlock]
+    
+    mov ah, 0x42										
+	mov dl, [kernel.drive_id]							
+	mov si, kernel_transfer_model						
+	int 0x13
+
+    ;jmp 0x1000:0x0000 
     
     ret

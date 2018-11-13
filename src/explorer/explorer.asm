@@ -104,6 +104,7 @@ preos_explorer:
             mov si, 0                                   ; set data offeset
             mov cx, 2048                                ; transfer 2048 bytes (1 sector)
             int 0x90
+            
             pop si
             pop ds
             mov ax, 0x2000
@@ -238,10 +239,10 @@ sos_commander_listDirectory:
         mov al, 'D'                                        ; set d for dir
         .readFilesFromRootDirectory_typeOutput:
         ; draw prompt
-        mov ah, 0x02    ; draw charachter
+        mov ah, 0x02      ; print character
         mov dl, 14        ; foreground
-        mov dh, 0        ; background
-        mov bx, 20         ; x
+        mov dh, 0         ; background
+        mov bx, 20        ; x
         mov cx, 0         ; y
         mov cl, byte [preos_explorer_data.screenYPosition]         ; y
         int 0x81

@@ -89,10 +89,8 @@ executionController:
 		mov ds, ax
 		jmp .executionexecutionController_end
 
-
 		.executionexecutionController_end:
 	sti
 	iret
-
 
 executionexecutionControllerEnd:
