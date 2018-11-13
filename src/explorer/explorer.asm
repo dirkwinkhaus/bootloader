@@ -202,14 +202,14 @@ sos_commander_prepareScreen:
     ret
 
 sos_commander_listDirectory:    
-    mov byte [preos_explorer_data.markerMaxY], 2                            ; reset marker limit
+    mov byte [preos_explorer_data.markerMaxY], 2        ; reset marker limit
     ; get files of root directory    
     mov cx, [preos_explorer_data.directoryIndex]
     
     .sos_commander_listDirectory_indexLoop:
         or cx, cx
         jz .sos_commander_listDirectory_indexLoopEnd
-        call iso9660_getNextDirectory                                ; load root directory
+        call iso9660_getNextDirectory                   ; load root directory
         dec cx
     .sos_commander_listDirectory_indexLoopEnd:
     
@@ -220,7 +220,7 @@ sos_commander_listDirectory:
         call iso9660_getFirstFile
         jc .readFilesFromRootDirectory_end                        ; no file found
 
-        mov ah, 0x03    ; draw directory entry
+        mov ah, 0x03    ; echo directory entry
         mov si, iso9660_fileDescriptor.fileIdentifier
         mov dl, 15        ; foreground
         mov dh, 0        ; background
