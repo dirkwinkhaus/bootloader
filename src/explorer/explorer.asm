@@ -15,10 +15,10 @@ preos_explorer_data:
     .marker:                    db '>'
     .marker_x:                  db 0
     .marker_y:                  db 2
-    .markerMinY                 db 2
-    .markerMaxY                 db 2
-    .key                        db 0
-    .directoryIndex             db 0
+    .markerMinY:                 db 2
+    .markerMaxY:                 db 2
+    .key:                        db 0
+    .directoryIndex:             db 0
 
 drive_id db 0
 
