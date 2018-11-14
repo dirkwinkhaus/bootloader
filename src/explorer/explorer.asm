@@ -1,8 +1,9 @@
 jmp preos_explorer
 
-%include '../interfaces\iso9660\iso9660_rom_structure.asm'
-%include '../interfaces\iso9660\iso9660_data_structure.asm'
-%include '../interfaces\iso9660\iso9660_controller.asm'
+%include '..\kernel\kernel_model.asm'
+%include '..\interfaces\iso9660\iso9660_rom_structure.asm'
+%include '..\interfaces\iso9660\iso9660_data_structure.asm'
+%include '..\interfaces\iso9660\iso9660_controller.asm'
 %include 'hex_viewer.asm'
 
 preos_explorer_data:
@@ -15,10 +16,10 @@ preos_explorer_data:
     .marker:                    db '>'
     .marker_x:                  db 0
     .marker_y:                  db 2
-    .markerMinY:                 db 2
-    .markerMaxY:                 db 2
-    .key:                        db 0
-    .directoryIndex:             db 0
+    .markerMinY:                db 2
+    .markerMaxY:                db 2
+    .key:                       db 0
+    .directoryIndex:            db 0
 
 drive_id db 0
 

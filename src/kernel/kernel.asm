@@ -1,14 +1,7 @@
 org 0x7C00                                      ; setup start address 
 jmp load_sys_dependencies                           ; load library in 2nd sector
 
-kernel:
-    .version: db 1, '0.0.7', 2
-    .boot_drive_id: db 0				; boot drive id
-    .drive_id: db 0
-    .str_boot_lookup_info: db 'Looking for boot.do...', 0
-    .boot_file_name: db 'BOOT.DO', 0
-    .boot_file_found: db 'Found kernel file.', 0
-    .boot_file_not_found: db 'Kernel file not found.', 0
+%include 'kernel_model.asm'
 
 start:
     ; hide cursor
@@ -17,8 +10,8 @@ start:
     int 0x10
 
     mov ah, 0x0B                                ; clears whole screen
-    mov dl, 14                                  ; foreground
-    mov dh, 1                                   ; background
+    mov dl, 2                                  ; foreground
+    mov dh, 0                                   ; background
     int 0x81
 
     call find_kernel_file;
@@ -45,8 +38,8 @@ find_kernel_file:
     ;print copyright info
     mov ah, 0x03    ; draw string
     mov si, kernel.str_boot_lookup_info
-    mov dl, 14        ; foreground
-    mov dh, 1        ; background
+    mov dl, 2        ; foreground
+    mov dh, 0        ; background
     mov bx, 0         ; x
     mov cx, 0         ; y
     int 0x81 
@@ -80,7 +73,7 @@ boot_file_not_found:
     mov ah, 0x03    
     mov si, kernel.boot_file_not_found
     mov dl, 4
-    mov dh, 1
+    mov dh, 0
     mov bx, 0
     mov cx, 2
     int 0x81 
@@ -91,8 +84,8 @@ boot_file_not_found:
 boot_file_found:
     mov ah, 0x03
     mov si, kernel.boot_file_found
-    mov dl, 14
-    mov dh, 1
+    mov dl, 2
+    mov dh, 0
     mov bx, 0
     mov cl, 2
     int 0x81
