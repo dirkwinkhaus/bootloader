@@ -1,6 +1,9 @@
+org 0x0000
 ;mov ax, 0x1000  					; set up kernel position
 ;mov ds, ax
 ;mov es, ax
+
+
 
 call nano_io_initTextMode
 call nano_showStartupInfo
