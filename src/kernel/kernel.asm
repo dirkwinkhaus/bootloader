@@ -52,7 +52,7 @@ boot_file_not_found:
     mov dl, 4
     mov dh, 0
     mov bx, 0
-    mov cx, 2
+    mov cx, 1
     int 0x81 
     
     jmp $
@@ -64,10 +64,18 @@ boot_file_found:
     mov dl, 2
     mov dh, 0
     mov bx, 0
-    mov cl, 2
+    mov cl, 1
     int 0x81
 
     call kernel_print_boot_file_information
+
+    mov ah, 0x03
+    mov si, kernel.loading_terminal
+    mov dl, 2
+    mov dh, 0
+    mov bx, 0
+    mov cl, 2
+    int 0x81
 
 ;wait here for information displayed
     mov ah, 0x86
