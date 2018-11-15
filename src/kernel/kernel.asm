@@ -14,7 +14,14 @@ start:
     mov dh, 0                                   ; background
     int 0x81
 
-    call find_kernel_file;
+	call kernel_find_bootfile
+
+    cmp al, 1
+    je boot_file_found
+
+    cmp al, 0
+    je boot_file_not_found
+
     jmp $                                       ; stay here
 
     times 2046-($-$$) db 0                      ; fill rest with 0 to fill sector
@@ -31,43 +38,10 @@ load_dependencies:
     %include '../interfaces\iso9660\iso9660_rom_structure.asm'
     %include '../interfaces\iso9660\iso9660_data_structure.asm'
     %include '../interfaces\iso9660\iso9660_controller.asm'
-    %include 'transfer_model.asm'
+    %include 'kernel_transfer_model.asm'
     %include 'print_bootfile_information.asm'
+    %include 'kernel_find_bootfile.asm'
 
-find_kernel_file:   
-    ;print copyright info
-    mov ah, 0x03    ; draw string
-    mov si, kernel.str_boot_lookup_info
-    mov dl, 2        ; foreground
-    mov dh, 0        ; background
-    mov bx, 0         ; x
-    mov cx, 0         ; y
-    int 0x81 
-    
-    call iso9660_getFirstDirectory
-    call iso9660_getNextFile
-
-    .find_kernel_file_loop:
-        call iso9660_getNextFile
-        call iso9660_getFirstFile
-        jc .find_kernel_file_loop_end
-
-        ; compare kernel file name with found file
-        mov ah, 0x0D
-        mov si, kernel.boot_file_name
-        mov di, iso9660_fileDescriptor.fileIdentifier
-        mov cx, 0
-        int 0x81
-
-        cmp al, 1
-        je .find_kernel_file_loop_end
-        
-        jmp .find_kernel_file_loop
-    .find_kernel_file_loop_end:
-    
-    cmp al, 1
-    je boot_file_found
-    
 ; show error info
 boot_file_not_found:
     mov ah, 0x03    

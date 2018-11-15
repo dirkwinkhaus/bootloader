@@ -20,10 +20,9 @@ preos_explorer_data:
     .markerMaxY:                db 2
     .key:                       db 0
     .directoryIndex:            db 0
+	.drive_id: 					db 0
 
-drive_id db 0
-
-mov al, drive_id
+mov al, preos_explorer_data.drive_id
 
 preos_explorer:
 
