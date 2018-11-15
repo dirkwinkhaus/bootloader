@@ -15,7 +15,6 @@ str_command_commandNotFound db 'command not found.', 0x0D, 0x0A, 0
 cmd_noCommand db 0
 cmd_about db 'about', 0
 cmd_version db 'version', 0
-cmd_how db 'how', 0
 cmd_add db 'add', 0
 cmd_reboot db 'reboot', 0
 cmd_exit db 'exit', 0
