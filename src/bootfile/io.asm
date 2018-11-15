@@ -1,7 +1,5 @@
-;io.asm main part of nanoOS
-
 ; init text mode
-nano_io_initTextMode:
+cli_io_initTextMode:
 	mov ah, 0x00
 	mov al, 0x03
 	int 0x10
@@ -9,7 +7,7 @@ nano_io_initTextMode:
 
 
 ; inserts a cr/lf in text mode
-nano_io_newLine:
+cli_io_newLine:
 	mov ah, 0x0E
 	mov al, 0x0D
 	int 0x10
@@ -19,13 +17,13 @@ nano_io_newLine:
 
 	
 ; waits for key pressed
-nano_io_waitForKey:
+cli_io_waitForKey:
 	mov ah, 0x00
 	int 0x16
 	ret
 
 ; prints a string from si
-nano_io_printString:
+cli_io_printString:
 	lodsb        			
 
 	or al, al  				
@@ -34,15 +32,15 @@ nano_io_printString:
 	mov ah, 0x0E
 	int 0x10      			
 
-	jmp nano_io_printString
+	jmp cli_io_printString
 
 	.done_printString:
 	ret
 
 
 ; read keys until return and saves them in di
-nano_io_readLine:
-	mov di, nano_io_readLine_buffer
+cli_io_readLine:
+	mov di, cli_io_readLine_buffer
 	xor cl, cl
 	.part_loop:
 		mov ah, 0
@@ -101,7 +99,7 @@ nano_io_readLine:
 
 
 ; copies a string to a buffer // until space or 0
-nano_io_copyString:
+cli_io_copyString:
 	.part_loop:
 		lodsb       						; load byte from si in al 			
 		cmp al, 0x20						; space?
@@ -117,7 +115,7 @@ nano_io_copyString:
 			ret
 	
 		
-nano_io_clearParameterData:
+cli_io_clearParameterData:
 	; clear parameter
 	mov di, cmd_parameter_1
 	mov al, 0x00						; insert 0 to di
@@ -132,7 +130,7 @@ nano_io_clearParameterData:
 		
 
 ; compares strings from si and di 
-nano_io_compareStrings:
+cli_io_compareStrings:
 	.part_loop:
 		mov al, [si]						; inserted command "howtt"
 		mov bl, [di]    					; command to compare "howto"
@@ -158,7 +156,7 @@ nano_io_compareStrings:
 
 
 ;compares strings from si and di till space for command comparison and parameters
-nano_io_compareStringsTillSpace:
+cli_io_compareStringsTillSpace:
 	.part_loop:
 		mov al, [si]						; inserted command "howtt"
 		mov bl, [di]    					; command to compare "howto"
@@ -174,7 +172,7 @@ nano_io_compareStringsTillSpace:
 		jmp .part_loop  					; loop!
 
 	.part_doneClearParameter:
-		call nano_io_clearParameterData
+		call cli_io_clearParameterData
 		jmp .part_done
 
 	.part_notEqual:
@@ -189,17 +187,17 @@ nano_io_compareStringsTillSpace:
 			ret									; jump to calling point
 
 	.part_parameter:		
-		call nano_io_clearParameterData
+		call cli_io_clearParameterData
 		
 		lodsb       						; get space away 			
 		mov di, cmd_parameter_1				; store in cmdParameter_x
-		call nano_io_copyString				; copy to cmdParameter_x
+		call cli_io_copyString				; copy to cmdParameter_x
 		jnc .part_done						; if no ending space go to end else read next parameter
 		mov di, cmd_parameter_2				; store in cmdParameter_x
-		call nano_io_copyString				; copy to cmdParameter_x
+		call cli_io_copyString				; copy to cmdParameter_x
 		jnc .part_done						; if no ending space go to end else read next parameter
 		mov di, cmd_parameter_3				; store in cmdParameter_x
-		call nano_io_copyString				; copy to cmdParameter_x
+		call cli_io_copyString				; copy to cmdParameter_x
 		jnc .part_done						; if no ending space go to end else read next parameter
 		
 		jmp .part_done
@@ -207,3 +205,181 @@ nano_io_compareStringsTillSpace:
 	.part_done: 	
 		stc  								; equal, set the carry flag
 		ret									; jump to calling point
+
+;cli kernel functions
+
+; show debug info
+cli_debug:
+	mov si, str_kernel_debug
+	call cli_io_printString
+	ret
+
+
+; shows startup info
+cli_showStartupInfo:
+	mov si, str_kernel_kernel
+	call cli_io_printString
+	mov si, str_kernel_version
+	call cli_io_printString
+	mov si, str_kernel_loaded
+	call cli_io_printString
+	ret
+
+
+; draws prompt
+cli_showPromt:
+	mov si, str_command_prompt
+	call cli_io_printString
+	ret
+
+
+; shows info command not found
+cli_commandNotFound:
+	mov si, str_command_commandNotFound
+	call cli_io_printString
+	call cli_io_newLine
+	ret
+
+
+; interpretes a command in si
+cli_interpretCommand:
+	mov si, cli_io_readLine_buffer
+
+
+	; is the command nothing?
+	mov di, cmd_noCommand
+	call cli_io_compareStringsTillSpace
+	jc cli_command_noCommand
+
+	; is the command nothing?
+	mov di, cmd_exit
+	call cli_io_compareStringsTillSpace
+	jc cli_command_exit
+
+	; is the command about?
+	mov di, cmd_about
+	call cli_io_compareStringsTillSpace
+	jc cli_command_about
+
+	; is the command version?
+	mov di, cmd_version
+	call cli_io_compareStringsTillSpace
+	jc cli_command_version
+
+	; is the command version?
+	mov di, cmd_reboot
+	call cli_io_compareStringsTillSpace
+	jc cli_command_reboot
+
+	; is the command how?
+	mov di, cmd_how
+	call cli_io_compareStringsTillSpace
+	jc cli_command_how
+
+	jmp cli_command_commandNotFound
+
+; ----------------------------------------------------------------------
+; command section of cli
+
+; no command do nothing
+cli_command_noCommand:
+	ret
+
+; about command
+cli_command_about:
+	mov si, str_kernel_about
+	call cli_io_printString
+	call cli_io_newLine
+	ret
+
+; version command
+cli_command_version:
+	mov si, str_kernel_kernel
+	call cli_io_printString
+	mov si, str_kernel_version
+	call cli_io_printString
+	call cli_io_newLine
+	call cli_io_newLine
+	ret
+
+; reboot command
+cli_command_reboot:
+	; store magic value at 0040h:0072h to reboot:
+	;		0000h - cold boot.
+	;		1234h - warm boot.
+	MOV  AX,0040h
+	MOV  DS,AX
+	MOV  word[0072h],0000h   ; cold boot.
+	JMP  0FFFFh:0000h	 ; reboot!
+	ret						; haha ret!
+
+; reboot command
+cli_command_exit:
+	pop ax
+	mov ax, 0x0000
+	mov es, ax
+	mov ds, ax
+	jmp 0x000:0x7c00
+
+
+; how /help command
+cli_command_how:
+	; add command
+	mov si, cmd_parameter_1						; compare parameter 1
+	mov di, cmd_add								; with command "add"
+	call cli_io_compareStrings
+	jc .cli_command_how_add
+
+	; version command
+	mov si, cmd_parameter_1
+	mov di, cmd_version
+	call cli_io_compareStrings
+	jc .cli_command_how_version
+
+	; about command
+	mov si, cmd_parameter_1
+	mov di, cmd_about
+	call cli_io_compareStrings
+	jc .cli_command_how_about
+
+	; reboot command
+	mov si, cmd_parameter_1
+	mov di, cmd_reboot
+	call cli_io_compareStrings
+	jc .cli_command_how_reboot
+
+	; nothing found
+	jmp .cli_command_how_done_notFound
+
+	.cli_command_how_add:
+		mov si, str_info_how_add
+		call cli_io_printString
+		jmp .cli_command_how_done
+
+	.cli_command_how_version:
+		mov si, str_info_how_version
+		call cli_io_printString
+		jmp .cli_command_how_done
+
+	.cli_command_how_about:
+		mov si, str_info_how_about
+		call cli_io_printString
+		jmp .cli_command_how_done
+
+	.cli_command_how_reboot:
+		mov si, str_info_how_reboot
+		call cli_io_printString
+		jmp .cli_command_how_done
+
+	.cli_command_how_done_notFound:
+		mov si, str_info_how_noResult
+		call cli_io_printString
+
+	.cli_command_how_done:
+		call cli_io_newLine
+		call cli_io_newLine
+	ret
+
+cli_command_commandNotFound:
+	call cli_commandNotFound
+	ret

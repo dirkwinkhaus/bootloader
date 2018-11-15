@@ -82,9 +82,9 @@ boot_file_found:
     mov cx, 6
     int 0x15
 
-    mov al, byte [iso9660_fileDescriptor.locationOfExtendLBA1]
+    mov eax, dword [iso9660_fileDescriptor.locationOfExtendLBA1]
 	mov word [discAddressPacket.numberOfBlockTransfer], 1
-	mov [discAddressPacket.startingAbsoluteBlock], al
+	mov [discAddressPacket.startingAbsoluteBlock], eax
 	call iso9660_loadSectors
 
 	pop si

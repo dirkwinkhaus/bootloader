@@ -22,7 +22,7 @@ cmd_exit db 'exit', 0
 
 
 ;buffer data
-nano_io_readLine_buffer times 63 db 0
+cli_io_readLine_buffer times 63 db 0
 
 cmd_parameter_1 times 63 db 0
 cmd_parameter_2 times 63 db 0
