@@ -1,4 +1,9 @@
 command_reboot:
+	mov di, command_reboot.command
+	call cli_io_compareStringsTillSpace
+	jc .program
+	jmp .end
+
 	.help: db 'sample of use:', 0x0D, 0x0A, 'reboot', 0
 	.command: db 'reboot', 0
 
@@ -10,3 +15,5 @@ command_reboot:
 		MOV  DS,AX
 		MOV  word[0072h],0000h
 		JMP  0FFFFh:0000h
+
+	.end:

@@ -1,4 +1,9 @@
 command_about:
+	mov di, command_about.command
+	call cli_io_compareStringsTillSpace
+	jc .program
+	jmp .end
+
 	.help: db 'sample of use:', 0x0D, 0x0A, 'about', 0
 	.command: db 'about', 0
 
@@ -9,3 +14,4 @@ command_about:
 
 	jmp command_line_interface.input
 
+	.end:

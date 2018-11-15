@@ -1,4 +1,9 @@
 command_how:
+	mov di, command_how.command
+	call cli_io_compareStringsTillSpace
+	jc .program
+	jmp .end
+
 	.help: db 'sample of use:', 0x0D, 0x0A, 'how [e.g. exit|version|reboot]', 0
 	.command: db 'how', 0
 	.no_help: db 'no help found for this command', 0
@@ -61,3 +66,4 @@ command_how:
 
 		jmp command_line_interface.input
 
+	.end:
