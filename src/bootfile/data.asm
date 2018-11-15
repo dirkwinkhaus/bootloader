@@ -1,11 +1,11 @@
 ;string data for output
 
 ;kernel info
-str_kernel_version db '0.0.2', 0
-str_kernel_kernel db 'nanoos kernel ', 0
+str_kernel_version db '0.1.0', 0
+str_kernel_kernel db 'preos kernel ', 0
 str_kernel_loaded db ' loaded.', 0x0D, 0x0A, 0
 str_kernel_debug db '*DEBUG*', 0x0D, 0x0A, 0
-str_kernel_about db 'nanoos', 0x0D, 0x0A, '------', 0x0D, 0x0A, 'lorem ipsum dolor set amet.', 0x0D, 0x0A, 0
+str_kernel_about db 'preos', 0x0D, 0x0A, '------', 0x0D, 0x0A, '(c)opyright by dirk winkhaus', 0x0D, 0x0A, 0
 
 ;command info
 str_command_prompt db '>>', 0

@@ -35,12 +35,15 @@ load_sys_dependencies:
     jmp start
     
 load_dependencies:
-    %include '../interfaces\iso9660\iso9660_rom_structure.asm'
-    %include '../interfaces\iso9660\iso9660_data_structure.asm'
-    %include '../interfaces\iso9660\iso9660_controller.asm'
+    %include '..\interfaces\iso9660\iso9660_rom_structure.asm'
+    %include '..\interfaces\iso9660\iso9660_data_structure.asm'
+    %include '..\interfaces\iso9660\iso9660_controller.asm'
     %include 'kernel_transfer_model.asm'
     %include 'print_bootfile_information.asm'
     %include 'kernel_find_bootfile.asm'
+
+    ;temp remove later
+    %include '..\explorer\hex_viewer.asm'
 
 ; show error info
 boot_file_not_found:
@@ -65,16 +68,17 @@ boot_file_found:
     int 0x81
 
     call kernel_print_boot_file_information
-    
-    ; load kernel
-    mov dword[iso9660_fileDescriptor.locationOfExtendLBA1], eax
-    mov eax, dword [kernel_transfer_model.startingAbsoluteBlock]
-    
-    mov ah, 0x42										
-	mov dl, [kernel.drive_id]							
-	mov si, kernel_transfer_model						
-	int 0x13
 
-    ;jmp 0x2000:0x0000
-    
+    mov al, byte [iso9660_fileDescriptor.locationOfExtendLBA1]
+	mov word [discAddressPacket.numberOfBlockTransfer], 1
+	mov [discAddressPacket.startingAbsoluteBlock], al
+	call iso9660_loadSectors
+
+	pop si
+	pop ds
+	mov ax, 0x1000
+	mov es, ax
+	mov ds, ax
+	jmp 0x1000:0x0000
+
     ret
