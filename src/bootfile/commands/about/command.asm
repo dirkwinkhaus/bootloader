@@ -8,6 +8,7 @@ command_about:
 	.command: db 'about', 0
 
 	.program:
+
 	mov si, str_kernel_about
 	call cli_io_printString
 	call cli_io_newLine

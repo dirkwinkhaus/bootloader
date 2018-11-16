@@ -7,6 +7,8 @@ str_kernel_loaded db ' loaded.', 0x0D, 0x0A, 0
 str_kernel_debug db '*DEBUG*', 0x0D, 0x0A, 0
 str_kernel_about db 'preos', 0x0D, 0x0A, '------', 0x0D, 0x0A, '(c)opyright by dirk winkhaus', 0x0D, 0x0A, 0
 
+str_parameter_help db '--help'
+
 ;command info
 str_command_prompt db '>>', 0
 str_command_commandNotFound db 'command not found.', 0x0D, 0x0A, 0

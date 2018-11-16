@@ -10,10 +10,9 @@ command_line_interface:
 
 		; interpretes a command in si
 		.cli_interpretCommand:
-			mov si, cli_io_readLine_buffer
-
 
 			; is the command nothing?
+			mov si, cli_io_readLine_buffer
 			mov di, cmd_noCommand
 			call cli_io_compareStringsTillSpace
 			jc command_line_interface.input
@@ -29,10 +28,8 @@ command_line_interface:
 
 		jmp command_line_interface.input
 
-	jmp endOfKernel
 	%include 'io.asm'
 	%include 'data.asm'
 
-	endOfKernel:
 	ret
 
