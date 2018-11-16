@@ -38,6 +38,25 @@ cli_io_printString:
 	ret
 
 
+;mov si, a_string_label
+;mov dl, 14		; foreground
+;mov dh, 1		; background
+;mov bx, 5 		; x
+;mov cx, 3 		; y
+cli_io_print_string_as_hex:
+	.loop:
+	xor ax, ax
+	mov al, byte [si]
+	int 0x81
+	add bx, 2
+	inc si
+	cmp al, 0
+	jne .loop
+
+	ret
+
+
+
 ; read keys until return and saves them in di
 cli_io_readLine:
 	mov di, cli_io_readLine_buffer

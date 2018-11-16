@@ -140,6 +140,9 @@ textOperation:
 	
 	jmp .textOperation_end
 ;===========================================================================================
+
+
+
 	;mov ah, 0x0D	; is string 1 contained by string 2
 	;mov si, string_variable_1		; min this string should end with 0
 	;mov di, string_variable_2
