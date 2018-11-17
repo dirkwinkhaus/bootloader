@@ -7,7 +7,7 @@ str_kernel_loaded db ' loaded.', 0x0D, 0x0A, 0
 str_kernel_debug db '*DEBUG*', 0x0D, 0x0A, 0
 str_kernel_about db 'preos', 0x0D, 0x0A, '------', 0x0D, 0x0A, '(c)opyright by dirk winkhaus', 0x0D, 0x0A, 0
 
-str_parameter_help db '--help'
+str_parameter_help db '--help', 0
 
 ;command info
 str_command_prompt db '>>', 0

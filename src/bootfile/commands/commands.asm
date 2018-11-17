@@ -1,6 +1,5 @@
 %include 'commands\about\command.asm'
 %include 'commands\exit\command.asm'
-%include 'commands\how\command.asm'
 %include 'commands\reboot\command.asm'
 %include 'commands\version\command.asm'
 %include 'commands\print\command.asm'

@@ -8,6 +8,11 @@ command_reboot:
 	.command: db 'reboot', 0
 
 	.program:
+		mov di, cmd_parameter_1
+		mov si, str_parameter_help
+		call cli_io_compareStrings
+		jc .display_help
+
 		; store magic value at 0040h:0072h to reboot:
 		;		0000h - cold boot.
 		;		1234h - warm boot.
@@ -15,5 +20,12 @@ command_reboot:
 		MOV  DS,AX
 		MOV  word[0072h],0000h
 		JMP  0FFFFh:0000h
+
+	.display_help:
+		mov si, .help
+		call cli_io_printString
+		call cli_io_newLine
+		call cli_io_newLine
+		jmp .end
 
 	.end:
