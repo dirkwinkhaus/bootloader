@@ -2,7 +2,7 @@
 discNavigationPacket:
     .drive:                 db 0
     .directoryId:           dw 0
-    .parentDirectoryId      dw 0
+    .parentDirectoryId:     dw 0
     .directoryName:         times 33 db 0
     .fileName:              times 33 db 0
 
@@ -32,5 +32,5 @@ discInformationBuffer:
     .sectorCount:           dw 0                ; Sector Count.  This is the number of virtual sectors the system will store at Load Segment during the initial boot procedure.  This field is only valid for function 4C
     .cylinderCount:         db 0                ; Bits 0-7 of the cylinder count.  This should match the value returned in CH when INT 13 function 08 is invoked.
     .returnedCl:            db 0                 ; This is the value returned in the CL register when INT 13 function 08 is invoked.  Bits 0-5 are the sector count.  Bits 6 and 7 are the high order 2 bits of the cylinder count.
-    .headCount              db 0                ; This is the head count, it should match the value in DH when INT 13 Function 08 is invoked.
+    .headCount:             db 0                ; This is the head count, it should match the value in DH when INT 13 Function 08 is invoked.
 

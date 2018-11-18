@@ -30,8 +30,9 @@ start:
 load_sys_dependencies:
     mov [kernel.boot_drive_id], dl     ; save boot drive id
     mov [kernel.drive_id], dl     ; set drive id
-    %include 'interrupts\sosInt81.asm'          ; loads interrupt 81h
-    %include 'interrupts\sosInt90.asm'          ; loads interrupt 81h
+    %include 'interrupts\int_81.asm'          ; loads interrupt 81h
+    %include 'interrupts\int_90.asm'          ; loads interrupt 81h
+    %include 'interrupts\int_92.asm'          ; loads interrupt 81h
     jmp start
     
 load_dependencies:
