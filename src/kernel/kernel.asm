@@ -32,7 +32,7 @@ load_sys_dependencies:
     mov [kernel.drive_id], dl     ; set drive id
     %include 'interrupts\int_81.asm'          ; loads interrupt 81h
     %include 'interrupts\int_90.asm'          ; loads interrupt 81h
-    %include 'interrupts\int_92.asm'          ; loads interrupt 81h
+    ;%include 'interrupts\int_92.asm'          ; loads interrupt 81h
     jmp start
     
 load_dependencies:

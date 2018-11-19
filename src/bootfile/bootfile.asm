@@ -10,3 +10,5 @@ dependencies:
 
 boot:
 	call command_line_interface
+
+
