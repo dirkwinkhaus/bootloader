@@ -3,6 +3,7 @@
 # general vars
 
 release_directory = /release
+content_directory = /release/content
 
 # general commands
 
@@ -16,10 +17,10 @@ stop: remove-compiler
 
 compile-bootfile.bin: working_dirctory = /source/boot
 compile-bootfile.bin:
-	docker exec -it compiler \
+	docker exec -i compiler \
 	gcc -m32 -Wall -Wextra -nostdlib -nostartfiles -nodefaultlibs -c $(working_dirctory)/bootfile.c -o $(working_dirctory)/bootfile.o && \
-	docker exec -it compiler \
-	ld -T $(working_dirctory)/bootfile.ld -m elf_i386 -o $(release_directory)/bootfile.bin $(working_dirctory)/bootfile.o
+	docker exec -i compiler \
+	ld -T $(working_dirctory)/bootfile.ld -m elf_i386 -o $(content_directory)/bootfile.bin $(working_dirctory)/bootfile.o
 
 compile-bootloader.bin: working_dirctory = /source/boot
 compile-bootloader.bin:
@@ -56,6 +57,10 @@ release-clean: compile
 clean: release-clean remove-compiler
 
 setup: setup-compiler
+
+burn:
+	docker exec -i compiler \
+	genisoimage -v -eltorito-boot /release/bootloader.bin -joliet -rational-rock -volid PREOS -output /release/preos.iso /release/content
 
 compile: compile-boot
 
