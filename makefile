@@ -8,8 +8,7 @@ compile:
 
 stop: remove-compiler
 
-# bootloader targets
-
+# boot targets
 
 compile-bootfile.bin: working_dirctory = /source/boot
 compile-bootfile.bin:
@@ -25,19 +24,13 @@ compile-bootloader.bin:
 
 compile-boot: compile-bootloader.bin compile-bootfile.bin
 
-run:
-	qemu-system-i386  -kernel rc/bootloader
-
-release:
-	find rc/ ! -name '.gitignore' -exec rm -f {} \;
-
-
+#infrastructure
 
 build-compiler:
 	docker build -t widi/preos-compiler src/infrastructure/docker/
 
 setup-compiler: build-compiler
-	docker run -v `pwd`/src:/source --name=compiler -d -it widi/preos-compiler
+	docker run -v `pwd`/src:/source -v `pwd`/rc:/release --name=compiler -d -it widi/preos-compiler
 
 bash-compiler:
 	docker exec -it compiler /bin/bash
@@ -51,4 +44,19 @@ stop-compiler:
 remove-compiler: stop-compiler
 	docker rm compiler
 
+# summarized infrastructure targets
+
+clean: remove-compiler
+
+setup: setup-compiler
+
+compile: compile-boot
+
+release: compile
+	cd rc && find ./ ! -name '.gitignore' ! -name '.' -exec rm -fr {} \; && cd - && \
+	mv src/boot/bootfile.bin rc/ && \
+	mv src/boot/bootloader.bin rc/
+
+run:
+	qemu-system-i386  -kernel rc/bootloader
 
