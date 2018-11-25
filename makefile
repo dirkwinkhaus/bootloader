@@ -60,10 +60,10 @@ setup: setup-compiler
 
 burn:
 	docker exec -i compiler \
-	genisoimage -v -eltorito-boot /release/bootloader.bin -joliet -rational-rock -volid PREOS -output /release/preos.iso /release/content
+	genisoimage -verbose -eltorito-boot /release/bootloader.bin -joliet -rational-rock -volid PREOS -output /release/preos.iso /release/content
 
 compile: compile-boot
 
 run:
-	qemu-system-i386  -kernel rc/bootloader
+	qemu-system-i386 -cdrom rc\preos.iso
 
