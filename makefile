@@ -1,21 +1,54 @@
 .DEFAULT_GOAL := build
 
-explorer:
-	cd src\real_mode\explorer && nasm explorer.asm -f bin -o ..\..\..\disc_data\explorer.do
+# general commands
 
-reboot:
-	cd src\real_mode\reboot && nasm reboot.asm -f bin -o ..\..\..\disc_data\reboot.do
+setup: setup-compiler
 
-bootfile:
-	cd src\real_mode\bootfile && nasm bootfile.asm -f bin -o ..\..\..\disc_data\bootfile.do
+compile:
 
-kernel:
-	cd src\real_mode\kernel && nasm kernel.asm -f bin -o ..\..\..\rc\kernel.bin
+stop: remove-compiler
 
-burn:
-	del rc\preOS.iso && ultraiso -volume myVolume -sysid mySysId -preparer widi -publisher widi -joliet -bootfile rc\kernel.bin -output rc\preOS.iso -file disc_data\file.txt -file disc_data\bootfile.do -file disc_data\reboot.do -directory disc_data\directory
+# bootloader targets
+
+
+compile-bootfile.bin: working_dirctory = /source/boot
+compile-bootfile.bin:
+	docker exec -it compiler \
+	gcc -m32 -Wall -Wextra -nostdlib -nostartfiles -nodefaultlibs -c $(working_dirctory)/bootfile.c -o $(working_dirctory)/bootfile.o && \
+	docker exec -it compiler \
+	ld -T $(working_dirctory)/bootfile.ld -m elf_i386 -o $(working_dirctory)/bootfile.bin $(working_dirctory)/bootfile.o
+
+compile-bootloader.bin: working_dirctory = /source/boot
+compile-bootloader.bin:
+	docker exec -i compiler bash -c \
+	"cd $(working_dirctory) && nasm bootloader.asm -f bin -o bootloader.bin"
+
+compile-boot: compile-bootloader.bin compile-bootfile.bin
 
 run:
-	qemu-system-i386 -cdrom rc\preOS.iso
+	qemu-system-i386  -kernel rc/bootloader
 
-build: explorer reboot bootfile kernel burn run
+release:
+	find rc/ ! -name '.gitignore' -exec rm -f {} \;
+
+
+
+build-compiler:
+	docker build -t widi/preos-compiler src/infrastructure/docker/
+
+setup-compiler: build-compiler
+	docker run -v `pwd`/src:/source --name=compiler -d -it widi/preos-compiler
+
+bash-compiler:
+	docker exec -it compiler /bin/bash
+
+start-compiler:
+	docker start compiler
+
+stop-compiler:
+	docker stop compiler
+
+remove-compiler: stop-compiler
+	docker rm compiler
+
+
