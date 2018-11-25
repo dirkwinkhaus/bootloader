@@ -50,14 +50,14 @@ remove-compiler: stop-compiler
 
 # summarized infrastructure targets
 
-clean: remove-compiler
+release-clean: compile
+	cd rc && find ./ ! -name '.gitignore' ! -name '.' ! -name content -exec rm -fr {} \;
+
+clean: release-clean remove-compiler
 
 setup: setup-compiler
 
 compile: compile-boot
-
-release-clean: compile
-	cd rc && find ./ ! -name '.gitignore' ! -name '.' ! -content '.' -exec rm -fr {} \; && cd - && \
 
 run:
 	qemu-system-i386  -kernel rc/bootloader
