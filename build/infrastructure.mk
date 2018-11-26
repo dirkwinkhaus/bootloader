@@ -4,26 +4,6 @@ setup: setup-compiler
 
 stop: remove-compiler
 
-build-compiler:
-	docker build -t widi/preos-compiler src/infrastructure/docker/
-
-setup-compiler: build-compiler
-	docker run -v `pwd`/iso:/iso -v `pwd`/src:/source -v `pwd`/rc:/release --name=compiler -d -it widi/preos-compiler
-
-bash-compiler:
-	docker exec -it compiler /bin/bash
-
-start-compiler:
-	docker start compiler
-
-stop-compiler:
-	docker stop compiler
-
-remove-compiler: stop-compiler
-	docker rm compiler
-
-# summarized infrastructure targets
-
 prepare-release:
 	mkdir -p rc/boot/grub
 
@@ -42,6 +22,6 @@ compile: compile-kernel
 	cp src/infrastructure/grub/grub.cfg rc/boot/grub
 
 run: burn
-	qemu-system-i386 -cdrom preos.iso
+	qemu-system-i386 -cdrom iso/preos.iso
 
 all: clean setup compile burn run
