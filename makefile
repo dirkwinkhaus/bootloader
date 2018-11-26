@@ -3,7 +3,7 @@
 # general vars
 
 release_directory = /release
-content_directory = /release/content
+content_directory = /release
 
 # general commands
 
@@ -60,10 +60,10 @@ setup: setup-compiler
 
 burn:
 	docker exec -i compiler \
-	genisoimage -verbose -eltorito-boot /release/bootloader.bin -joliet -rational-rock -volid PREOS -output /release/preos.iso /release/content
+	genisoimage -verbose -eltorito-boot bootloader.bin -joliet -rational-rock -volid PREOS -no-emul-boot -output /release/preos.iso /release
 
 compile: compile-boot
 
 run:
-	qemu-system-i386 -cdrom rc\preos.iso
+	qemu-system-i386 -cdrom rc/preos.iso
 
