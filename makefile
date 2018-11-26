@@ -51,7 +51,7 @@ remove-compiler: stop-compiler
 
 # summarized infrastructure targets
 
-release-clean: compile
+release-clean:
 	cd rc && find ./ ! -name '.gitignore' ! -name '.' ! -name content -exec rm -fr {} \;
 
 clean: release-clean remove-compiler
@@ -67,3 +67,4 @@ compile: compile-boot
 run:
 	qemu-system-i386 -cdrom rc/preos.iso
 
+all: clean setup compile burn run
