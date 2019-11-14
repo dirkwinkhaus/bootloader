@@ -1,4 +1,5 @@
 command_exit:
+    mov si, cli_io_readLine_buffer
 	mov di, command_exit.command
 	call cli_io_compareStringsTillSpace
 	jc .program
@@ -8,10 +9,9 @@ command_exit:
 	.command: db 'exit', 0
 
 	.program:
-	pop ax
-	mov ax, 0x0000
-	mov es, ax
-	mov ds, ax
-	jmp 0x000:0x7c00
-
+        pop ax
+        mov ax, 0x0000
+        mov es, ax
+        mov ds, ax
+        jmp 0x000:0x7c00
 	.end:

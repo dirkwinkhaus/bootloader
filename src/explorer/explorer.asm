@@ -4,7 +4,7 @@ jmp preos_explorer
 %include '..\interfaces\iso9660\iso9660_rom_structure.asm'
 %include '..\interfaces\iso9660\iso9660_data_structure.asm'
 %include '..\interfaces\iso9660\iso9660_controller.asm'
-%include 'hex_viewer.asm'
+%include '..\explorer\hex_viewer.asm'
 
 preos_explorer_data:
     .str_copyrightInfo:         db 'preos explorer (c)opyright by dirk winkhaus | version 1.0.0', 0

@@ -1,4 +1,5 @@
 command_shutdown:
+    mov si, cli_io_readLine_buffer
 	mov di, command_shutdown.command
 	call cli_io_compareStringsTillSpace
 	jc .program

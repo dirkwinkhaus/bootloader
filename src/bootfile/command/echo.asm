@@ -1,11 +1,12 @@
-command_print:
-	mov di, command_print.command
+command_echo:
+    mov si, cli_io_readLine_buffer
+	mov di, command_echo.command
 	call cli_io_compareStringsTillSpace
 	jc .program
 	jmp .end
 
 	.help: db 'sample of use:', 0x0D, 0x0A, 'print something', 0
-	.command: db 'print', 0
+	.command: db 'echo', 0
 
 	.program:
 		mov di, cmd_parameter_1

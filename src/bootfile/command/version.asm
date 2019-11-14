@@ -1,4 +1,5 @@
 command_version:
+    mov si, cli_io_readLine_buffer
 	mov di, command_version.command
 	call cli_io_compareStringsTillSpace
 	jc .program

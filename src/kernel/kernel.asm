@@ -1,4 +1,4 @@
-org 0x7C00                                      ; setup start address 
+org 0x7C00                                      ; setup start address
 jmp load_sys_dependencies                           ; load library in 2nd sector
 
 %include 'kernel_model.asm'
@@ -93,6 +93,7 @@ boot_file_found:
 	mov ax, 0x1000
 	mov es, ax
 	mov ds, ax
+	; mov dl, [kernel.boot_drive_id]
 	jmp 0x1000:0x0000
 
     ret

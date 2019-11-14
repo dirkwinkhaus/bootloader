@@ -1,4 +1,4 @@
-org 0x0000
+;org 0x0000
 call nano_io_initTextMode
 
 mov si, info

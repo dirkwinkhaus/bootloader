@@ -1,4 +1,5 @@
 command_reboot:
+    mov si, cli_io_readLine_buffer
 	mov di, command_reboot.command
 	call cli_io_compareStringsTillSpace
 	jc .program
@@ -26,6 +27,7 @@ command_reboot:
 		call cli_io_printString
 		call cli_io_newLine
 		call cli_io_newLine
-		jmp .end
+
+        jmp command_line_interface.input
 
 	.end:

@@ -1,4 +1,5 @@
 command_about:
+    mov si, cli_io_readLine_buffer
 	mov di, command_about.command
 	call cli_io_compareStringsTillSpace
 	jc .program
@@ -9,10 +10,10 @@ command_about:
 
 	.program:
 
-	mov si, str_kernel_about
-	call cli_io_printString
-	call cli_io_newLine
+        mov si, str_kernel_about
+        call cli_io_printString
+        call cli_io_newLine
 
-	jmp command_line_interface.input
+        jmp command_line_interface.input
 
 	.end:

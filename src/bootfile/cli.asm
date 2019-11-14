@@ -8,18 +8,9 @@ command_line_interface:
 		call cli_showPromt				; show prompt
 		call cli_io_readLine			; read command line
 
-		; interpretes a command in si
 		.cli_interpretCommand:
+			%include 'commands.asm'
 
-			; is the command nothing?
-			mov si, cli_io_readLine_buffer
-			mov di, cmd_noCommand
-			call cli_io_compareStringsTillSpace
-			jc command_line_interface.input
-
-			%include 'commands\commands.asm'
-
-			; shows info command not found
 			cli_commandNotFound:
 				mov si, str_command_commandNotFound
 				call cli_io_printString
