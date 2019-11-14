@@ -3,9 +3,6 @@
 explorer:
 	cd src/explorer && nasm explorer.asm -f elf -o ../../disc_data/explorer.do
 
-explorer:
-	cd src/explorer && nasm explorer.asm -f elf -o ../../disc_data/explorer.do
-
 reboot:
 	cd src/reboot && nasm reboot.asm -f elf -o ../../disc_data/reboot.do
 

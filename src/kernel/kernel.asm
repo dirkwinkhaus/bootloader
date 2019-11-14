@@ -84,7 +84,7 @@ boot_file_found:
     int 0x15
 
     mov eax, dword [iso9660_fileDescriptor.locationOfExtendLBA1]
-	mov word [discAddressPacket.numberOfBlockTransfer], 1
+	mov word [discAddressPacket.numberOfBlockTransfer], 5
 	mov [discAddressPacket.startingAbsoluteBlock], eax
 	call iso9660_loadSectors
 
