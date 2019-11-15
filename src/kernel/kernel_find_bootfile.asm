@@ -7,7 +7,9 @@ kernel_find_bootfile:
     mov bx, 0         ; x
     mov cx, 0         ; y
     int 0x81 
-    
+
+    mov ebx, [iso9660_volumeDescriptor]
+    mov es, [iso9660_volumeDescriptor]
     call iso9660_getFirstDirectory
     call iso9660_getNextFile
 
@@ -20,7 +22,7 @@ kernel_find_bootfile:
         mov ah, 0x0D
         mov si, kernel.boot_file_name
         mov di, iso9660_fileDescriptor.fileIdentifier
-        mov cx, 0
+        XOR cx, cx
         int 0x81
 
         cmp al, 1

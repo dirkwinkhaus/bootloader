@@ -110,11 +110,14 @@ iso9660_getNextDirectory:
 		pop cx
 		pop ax
 	ret
-	
+
+; mov es, [DISC_ADDRESS_PACKET_POINTER]
 iso9660_getFirstDirectory:
 	call iso9660_getROMInformation									; get rom information
-	mov ax, [iso9660_volumeDescriptor.sectorOfPathTableLE1]
-	mov word [discAddressPacket.startingAbsoluteBlock], ax
+	mov eax, dword [iso9660_volumeDescriptor.sectorOfPathTableLE1]
+	;mov eax, dword[es:171]
+	;mov eax, dword[ebx + 171]
+	mov dword [discAddressPacket.startingAbsoluteBlock], eax
 	mov word [discAddressPacket.numberOfBlockTransfer], 31
 	call iso9660_loadSectors
 	push es
