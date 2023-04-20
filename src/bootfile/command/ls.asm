@@ -2,9 +2,9 @@ jmp command_ls
 
 ;times 5000 db 'a'
 
-%include '..\interfaces\iso9660\iso9660_rom_structure.asm';
-%include '..\interfaces\iso9660\iso9660_data_structure.asm';
-%include '..\interfaces\iso9660\iso9660_controller.asm';
+%include '../interfaces/iso9660/iso9660_rom_structure.asm';
+%include '../interfaces/iso9660/iso9660_data_structure.asm';
+%include '../interfaces/iso9660/iso9660_controller.asm';
 
 command_ls:
     mov si, cli_io_readLine_buffer

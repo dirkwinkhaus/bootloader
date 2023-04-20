@@ -34,10 +34,10 @@ extended_execution_controller:
 	;-------------------------------------------------------------
 	jmp .end
 	.dependencies:
-;		%include '..\interfaces\iso9660\iso9660_rom_structure.asm'
-    	%include '..\interfaces\iso9660\iso9660_data_structure.asm'
-;    	%include '..\interfaces\iso9660\iso9660_controller.asm'
-    	%include '..\interfaces\int_92.asm'
+;		%include '../interfaces/iso9660/iso9660_rom_structure.asm'
+    	%include '../interfaces/iso9660/iso9660_data_structure.asm'
+;    	%include '../interfaces/iso9660/iso9660_controller.asm'
+    	%include '../interfaces/int_92.asm'
 
     .drive_id: db 0
 

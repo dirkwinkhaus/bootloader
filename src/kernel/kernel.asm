@@ -30,21 +30,21 @@ start:
 load_sys_dependencies:
     mov [kernel.boot_drive_id], dl     ; save boot drive id
     mov [kernel.drive_id], dl     ; set drive id
-    %include 'interrupts\int_81.asm'          ; loads interrupt 81h
-    %include 'interrupts\int_90.asm'          ; loads interrupt 81h
-    ;%include 'interrupts\int_92.asm'          ; loads interrupt 81h
+    %include 'interrupts/int_81.asm'          ; loads interrupt 81h
+    %include 'interrupts/int_90.asm'          ; loads interrupt 81h
+    ;%include 'interrupts/int_92.asm'          ; loads interrupt 81h
     jmp start
     
 load_dependencies:
-    %include '..\interfaces\iso9660\iso9660_rom_structure.asm'
-    %include '..\interfaces\iso9660\iso9660_data_structure.asm'
-    %include '..\interfaces\iso9660\iso9660_controller.asm'
+    %include '../interfaces/iso9660/iso9660_rom_structure.asm'
+    %include '../interfaces/iso9660/iso9660_data_structure.asm'
+    %include '../interfaces/iso9660/iso9660_controller.asm'
     %include 'kernel_transfer_model.asm'
     %include 'print_bootfile_information.asm'
     %include 'kernel_find_bootfile.asm'
 
     ;temp remove later
-    %include '..\explorer\hex_viewer.asm'
+    %include '../explorer/hex_viewer.asm'
 
 ; show error info
 boot_file_not_found:
