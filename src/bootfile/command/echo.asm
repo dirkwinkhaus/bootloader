@@ -18,7 +18,8 @@ command_echo:
 		call cli_io_printString
 		call cli_io_newLine
 		call cli_io_newLine
-		jmp .finish
+
+		; ###########
 
 	.display_help:
 		mov si, .help

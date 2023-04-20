@@ -5,8 +5,8 @@ build:
 	docker build -f docker/build/build.dockerfile -t widi/bootloader .
 
 .PHONY: start
-start: stop
-	docker container list | grep bootloader-compile || docker rm bootloader-compile
+start:
+	# docker container list | grep bootloader-compile || docker rm bootloader-compile
 	docker run --name bootloader-compile -d -v ${PWD}:/build -it widi/bootloader
 
 .PHONY: stop
@@ -27,10 +27,10 @@ compile:
 
 .PHONY: burn
 burn:
-	docker exec bootloader-compile /build/scripts/burn.sh
+	docker exec -it bootloader-compile /build/scripts/burn.sh
 
 .PHONY: run
-run:
+run: compile burn
 	qemu-system-i386 -cdrom rc/preOS.iso
 
 
