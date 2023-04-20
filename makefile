@@ -26,7 +26,7 @@ compile:
 	docker exec bootloader-compile /build/scripts/compile.sh
 
 .PHONY: burn
-burn: compile
+burn:
 	docker exec bootloader-compile /build/scripts/burn.sh
 
 .PHONY: run
