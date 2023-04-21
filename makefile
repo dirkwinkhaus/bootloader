@@ -7,10 +7,10 @@ build:
 .PHONY: start
 start:
 	# docker container list | grep bootloader-compile || docker rm bootloader-compile
-	docker run --name bootloader-compile -d \
-		-v ~/.Xauthority:/root/.Xauthority \
+	#docker run --name bootloader-compile -d \
+make		-v ~/.Xauthority:/root/.Xauthority \
 		-v ${PWD}:/build \
-	   	-v /tmp/.X11-unix:/tmp/.X11-unix \
+	   	-v $DISPLAY:/tmp/.X11-unix \
 		-e DISPLAY=$DISPLAY \
 		-it widi/bootloader
 
@@ -32,7 +32,8 @@ burn:
 
 .PHONY: debug
 debug:
-	docker exec -it bootloader-compile /build/scripts/debug.sh
+	#docker exec -it bootloader-compile /build/scripts/debug.sh
+	docker run -v $DISPLAY:/tmp/.X11-unix -v ${PWD}:/build -it widi/bootloader /build/scripts/debug.sh
 
 .PHONY: run
 run: compile burn
