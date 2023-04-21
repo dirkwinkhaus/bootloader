@@ -1,8 +1,11 @@
+; draw text to screen
+
 ; init interrupts
 push es
 push bx
+push ax
 
-;INIT INT100h---------------------------------------------------
+;INIT INT81h---------------------------------------------------
 mov bx, 0
 mov es, bx
 
@@ -11,6 +14,7 @@ mov [es:0x81*4], dx
 mov ax, cs 
 mov [es:0x81*4+2], ax 
 ;--------------------------------------------------------------
+pop ax
 pop bx
 pop es
 
@@ -24,10 +28,6 @@ textOperation:
 	cmp ah, 0x00					
 	je .textOperation_initTextMode
 
-	;mov ah, 0x01		; read charachter
-	;mov bx, 10 		; x
-	;mov cx, 10 		; y
-	; return char in al 
 	cmp ah, 0x01
 	je .textOperation_readChar
 
@@ -141,8 +141,6 @@ textOperation:
 	jmp .textOperation_end
 ;===========================================================================================
 
-
-
 	;mov ah, 0x0D	; is string 1 contained by string 2
 	;mov si, string_variable_1		; min this string should end with 0
 	;mov di, string_variable_2
@@ -169,10 +167,7 @@ textOperation:
         .textOperation_compareStrings_not_equal:
         mov al, 0
         jmp .textOperation_end
-        
-        
-    
-    
+
 	;mov ah, 0x0C	; draw string by length
 	;mov al, 4		; how often place attributes
 	;mov dl, 14		; foreground
@@ -768,6 +763,5 @@ textOperation:
 	.textOperation_end:
 	sti
 	iret
-
 
 textEnd:

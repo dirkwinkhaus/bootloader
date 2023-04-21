@@ -25,16 +25,19 @@ command_ls:
         call cli_io_printString
         call cli_io_newLine
 
-		mov si, .output2
-		call cli_io_printString
-		call cli_io_newLine
-
+		push ebx
+		push es
 		mov ebx, [iso9660_volumeDescriptor]
 		mov es, [iso9660_volumeDescriptor]
 		call iso9660_getFirstDirectory
-		call iso9660_getNextFile
+		;call iso9660_getNextFile
+		pop es
+		pop ebx
 
-
+		mov si, iso9660_fileDescriptor.fileIdentifier
+		call cli_io_printString
+		call cli_io_newLine
+		jmp .end
 
 		.list_files_loop:
 			call iso9660_getNextFile
@@ -46,6 +49,13 @@ command_ls:
 			mov si, iso9660_fileDescriptor.fileIdentifier
 			call cli_io_printString
 			call cli_io_newLine
+
+			mov ax, 0
+
+			.delay:
+				inc ax
+				cmp ax, 0xFFFF
+				jne .delay
 
 			jmp .list_files_loop
 		.list_files_loop_end:

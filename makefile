@@ -29,8 +29,16 @@ compile:
 burn:
 	docker exec -it bootloader-compile /build/scripts/burn.sh
 
+.PHONY: debug
+debug:
+	docker exec -it bootloader-compile /build/scripts/debug.sh
+
 .PHONY: run
 run: compile burn
+	docker exec -it bootloader-compile /build/scripts/run.sh
+
+.PHONY: run-local
+run-local: compile burn
 	qemu-system-i386 -cdrom rc/preOS.iso
 
 

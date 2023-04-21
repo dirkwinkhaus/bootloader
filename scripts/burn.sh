@@ -1,12 +1,6 @@
 #!/bin/bash
 
-# https://wiki.osdev.org/Mkisofs
 cd /build
-
-echo $PATH
-which genisoimage
-
-ls -l /usr/bin
 
 mkisofs -r -o /build/rc/preOS.iso -b boot/kernel.bin -J  --no-emul-boot  -V preOS data
 #mkisofs -J -R -T -V "NGS-8.4-0 Server" \

@@ -114,13 +114,15 @@ iso9660_getNextDirectory:
 ; mov es, [DISC_ADDRESS_PACKET_POINTER]
 iso9660_getFirstDirectory:
 	call iso9660_getROMInformation									; get rom information
+	push es
+	push eax
+
 	mov eax, dword [iso9660_volumeDescriptor.sectorOfPathTableLE1]
 	;mov eax, dword[es:171]
 	;mov eax, dword[ebx + 171]
 	mov dword [discAddressPacket.startingAbsoluteBlock], eax
 	mov word [discAddressPacket.numberOfBlockTransfer], 31
 	call iso9660_loadSectors
-	push es
 	mov ax, 0x1000
 	mov es, ax
 	mov al, byte[es:0]
@@ -131,25 +133,28 @@ iso9660_getFirstDirectory:
 	mov [iso9660_directoryDescriptor.locationOfExtendLBA], eax
 	mov ax, word[es:10]
 	mov [iso9660_directoryDescriptor.directoryNumberOfParent], ax
-	pop es
 	mov ax, [iso9660_directoryDescriptor.locationOfExtendLBA]
 	mov word [discAddressPacket.startingAbsoluteBlock], ax
 	mov word [discAddressPacket.numberOfBlockTransfer], 1
 	call iso9660_loadSectors
+
+	pop eax
+	pop es
 	ret
 
 iso9660_getROMInformation:
+	push ax														; save register
+	push es														; save register
+	push di														; save register
+	push ds														; save register
+	push si														; save register
+
 	mov word [discAddressPacket.numberOfBlockTransfer], 1
 	mov word [discAddressPacket.startingAbsoluteBlock], 0x10
-	mov ah, 0x42										; extended function read
+	mov ah, 0x42												; extended function read
 	mov dl, [kernel.drive_id]								    ; drive id
-	mov si, discAddressPacket							; address of reading parameters
-	int 0x13											; read sectors and move to standard buffer location 0x1000:0x0000
-
-	push ax					; save register
-	push es					; save register
-	push di					; save register
-	push ds					; save register
+	mov si, discAddressPacket									; address of reading parameters
+	int 0x13													; read sectors and move to standard buffer location 0x1000:0x0000
 
 	mov es, [discAddressPacket.transferBufferSegment]				; set es segment register
 	mov di, [discAddressPacket.transferBufferOffset]				; set di offset register
@@ -169,8 +174,9 @@ iso9660_getROMInformation:
 		
 	xor bx, bx
 
-	pop ds					; restore 
-	pop di					; restore 
+	pop si					; restore
+	pop ds					; restore
+	pop di					; restore
 	pop es					; restore 
 	pop ax					; restore 
 	
@@ -189,9 +195,13 @@ iso9660_getDirectories:
 
 ;mov word [discAddressPacket.numberOfBlockTransfer], 10
 iso9660_loadSectors:
+	push ax
+	push si
 	mov ah, 0x42										; extended function read
 	mov dl, [kernel.drive_id]								    ; drive id
 	mov si, discAddressPacket							; address of reading parameters
 	int 0x13											; read sectors and move to standard buffer location 0x1000:0x0000
+	pop si
+	pop ax
 	ret
 

@@ -1,6 +1,7 @@
 ; init interrupts
 push es
 push bx
+push ax
 
 ;INIT INT90h---------------------------------------------------
 mov bx, 0
@@ -11,6 +12,7 @@ mov [es:0x90*4], dx
 mov ax, cs 
 mov [es:0x90*4+2], ax 
 ;--------------------------------------------------------------
+pop ax
 pop bx
 pop es
 
