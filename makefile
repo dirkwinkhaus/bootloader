@@ -7,7 +7,12 @@ build:
 .PHONY: start
 start:
 	# docker container list | grep bootloader-compile || docker rm bootloader-compile
-	docker run --name bootloader-compile -d -v ${PWD}:/build -it widi/bootloader
+	docker run --name bootloader-compile -d \
+		-v ~/.Xauthority:/root/.Xauthority \
+		-v ${PWD}:/build \
+	   	-v /tmp/.X11-unix:/tmp/.X11-unix \
+		-e DISPLAY=$DISPLAY \
+		-it widi/bootloader
 
 .PHONY: stop
 stop:
@@ -15,11 +20,7 @@ stop:
 
 .PHONY: bash
 bash:
-	docker run -v ${PWD}:/build -it widi/bootloader /bin/bash
-
-.PHONY: build compile-explorer
-compile-explorer:
-	docker run -v ${PWD}:/build -it widi/bootloader 'cd /build/src/explorer && nasm explorer.asm -f elf -o /build/disc_data/explorer.do'
+	docker run -v $DISPLAY:/tmp/.X11-unix -v ${PWD}:/build -it widi/bootloader /bin/bash
 
 .PHONY: compile
 compile:
@@ -40,32 +41,3 @@ run: compile burn
 .PHONY: run-local
 run-local: compile burn
 	qemu-system-i386 -cdrom rc/preOS.iso
-
-
-########################################################################################################################################
-
-old_explorer:
-	cd src/explorer && nasm explorer.asm -f elf -o ../../disc_data/explorer.do
-
-old_reboot:
-	cd src/reboot && nasm reboot.asm -f elf -o ../../disc_data/reboot.do
-
-old_bootfile:
-	cd src/bootfile && nasm bootfile.asm -f bin -o ../../disc_data/bootfile.do
-
-old_kernel:
-	cd src/kernel && nasm kernel.asm -f bin -o ../../rc/kernel.bin
-
-old_burn:
-	ultraiso -volume myVolume -sysid mySysId -preparer widi -publisher widi -joliet -bootfile rc\kernel.bin -output rc\preOS.iso -file disc_data\file.txt -file disc_data\bootfile.do -file disc_data\reboot.do -directory disc_data\directory
-	# ultraiso -volume myVolume -sysid mySysId -preparer widi -publisher widi -joliet -bootfile rc/kernel.bin -output rc/preOS.iso -file disc_data/file.txt -file disc_data/bootfile.do -file disc_data/reboot.do -directory disc_data/directory
-
-old_run:
-	qemu-system-i386 -cdrom rc/preOS.iso
-
-old_debug:
-	gdb -x debug.gdb
-
-old_build: explorer reboot bootfile kernel burn run
-
-########################################################################################################################################
